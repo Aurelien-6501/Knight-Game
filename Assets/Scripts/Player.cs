@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -15,11 +16,6 @@ public class Player : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    void Start()
-    {
-        Debug.Log("Start Player");
-    }
-
     void Update()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
@@ -27,12 +23,10 @@ public class Player : MonoBehaviour
 
         _movement = new Vector2(horizontal, vertical);
 
-        // Mettre à jour les paramètres de l'animateur
         _animator.SetFloat("Horizontal", horizontal);
         _animator.SetFloat("Vertical", vertical);
         _animator.SetFloat("Velocity", _movement.sqrMagnitude);
 
-        // Retourner le sprite en fonction de la direction horizontale
         if (horizontal < 0)
         {
             _spriteRenderer.flipX = true;
@@ -41,10 +35,27 @@ public class Player : MonoBehaviour
         {
             _spriteRenderer.flipX = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _animator.SetTrigger("Attack");
+        }
     }
 
     void FixedUpdate()
     {
         _rigidbody2D.linearVelocity = _movement * speed;
+    }
+
+    void Hit()
+    {
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 1.0f, _movement.normalized, 1.0f);
+        foreach (var hit in hits)
+        {
+            if (hit.collider != null && hit.collider.gameObject.CompareTag("skeleton"))
+            {
+                hit.collider.gameObject.GetComponent<Skeleton>().TakeDamage(20);
+            }
+        }
     }
 }
