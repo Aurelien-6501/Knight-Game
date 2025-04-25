@@ -3,7 +3,7 @@ using UnityEngine;
 public class Skeleton : MonoBehaviour
 {
     public Transform target;
-    public float speed = 2.0f;
+    public float speed = 1.0f;
     public int health = 60;
     public int attackDamage = 20;
 
@@ -50,7 +50,7 @@ public class Skeleton : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (isDead) return; // Ne pas prendre de dégâts si déjà mort
+        if (isDead) return; 
 
         health -= damage;
         if (health <= 0)
@@ -61,7 +61,7 @@ public class Skeleton : MonoBehaviour
 
     void Die()
     {
-        isDead = true; // Marquer le squelette comme mort
+        isDead = true; 
         _animator.SetTrigger("IsDead");
         _rigidbody2D.linearVelocity = Vector2.zero; 
         _rigidbody2D.bodyType = RigidbodyType2D.Kinematic; 
@@ -73,12 +73,12 @@ public class Skeleton : MonoBehaviour
             collider.enabled = false;
         }
     
-        Invoke("DisableSkeleton", 10f); // Planifier la désactivation du GameObject
+        Invoke("DisableSkeleton", 10f); 
     }
     
     void DisableSkeleton()
     {
-        gameObject.SetActive(false); // Désactiver le GameObject
+        gameObject.SetActive(false); 
     }
     
     void OnTriggerEnter2D(Collider2D other)
@@ -92,7 +92,7 @@ public class Skeleton : MonoBehaviour
 
     public void Damage()
     {
-        if (isDead) return; // Ne pas attaquer si mort
+        if (isDead) return;
         Debug.Log("Attack!");
         if (target.CompareTag("princess"))
         {

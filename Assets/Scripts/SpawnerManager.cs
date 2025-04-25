@@ -3,11 +3,22 @@ using System.Collections.Generic;
 
 public class SpawnerManager : MonoBehaviour
 {
-    public List<Transform> spawners; // Liste des emplacements des spawners
-    public GameObject skeletonPrefab; // Préfabriqué du squelette à faire apparaître
-    public float spawnInterval = 5f; // Intervalle de temps entre les apparitions
-
+    public List<Transform> spawners;
+    public GameObject skeletonPrefab;
+    public float spawnInterval = 5f; 
     private float lastSpawnTime;
+    private bool isSpawning = false;
+
+    public void StartSpawning()
+    {
+        isSpawning = true;
+        lastSpawnTime = Time.time;
+    }
+
+    public void StopSpawning()
+    {
+        isSpawning = false;
+    }
 
     void Start()
     {
@@ -16,6 +27,8 @@ public class SpawnerManager : MonoBehaviour
 
     void Update()
     {
+        if (!isSpawning) return;
+
         if (Time.time - lastSpawnTime >= spawnInterval)
         {
             foreach (Transform spawner in spawners)

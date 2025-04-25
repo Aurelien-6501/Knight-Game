@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     public float speed = 5f;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
+    private float lastAttackTime = 0f;
+    public float attackCooldown = 1.0f; // durée minimum entre chaque attaque en secondes
 
     void Awake()
     {
@@ -36,9 +38,10 @@ public class Player : MonoBehaviour
             _spriteRenderer.flipX = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= lastAttackTime + attackCooldown)
         {
             _animator.SetTrigger("Attack");
+            lastAttackTime = Time.time;
         }
     }
 
