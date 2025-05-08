@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private float lastAttackTime = 0f;
-    public float attackCooldown = 1.0f; // durée minimum entre chaque attaque en secondes
+    public float attackCooldown = 1.0f; 
 
     void Awake()
     {

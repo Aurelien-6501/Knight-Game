@@ -1,3 +1,4 @@
+// --- Skeleton.cs ---
 using UnityEngine;
 
 public class Skeleton : MonoBehaviour
@@ -9,7 +10,7 @@ public class Skeleton : MonoBehaviour
 
     private Animator _animator;
     private Rigidbody2D _rigidbody2D;
-    private bool isDead = false; // Variable pour contrôler l'état de mort
+    private bool isDead = false;
 
     void Awake()
     {
@@ -17,9 +18,18 @@ public class Skeleton : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
+    void Start()
+    {
+        GameObject princessObj = GameObject.FindWithTag("princess");
+        if (princessObj != null)
+        {
+            target = princessObj.transform;
+        }
+    }
+
     void Update()
     {
-        if (isDead) return; // Arrêter toute exécution si le squelette est mort
+        if (isDead) return;
 
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("skeleton_animation_attack"))
         {
@@ -50,7 +60,7 @@ public class Skeleton : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (isDead) return; 
+        if (isDead) return;
 
         health -= damage;
         if (health <= 0)
@@ -61,26 +71,26 @@ public class Skeleton : MonoBehaviour
 
     void Die()
     {
-        isDead = true; 
+        isDead = true;
         _animator.SetTrigger("IsDead");
-        _rigidbody2D.linearVelocity = Vector2.zero; 
-        _rigidbody2D.bodyType = RigidbodyType2D.Kinematic; 
+        _rigidbody2D.linearVelocity = Vector2.zero;
+        _rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
         _animator.SetBool("IsWalking", false);
         _animator.SetBool("IsAttacking", false);
-    
+
         foreach (var collider in GetComponents<Collider2D>())
         {
             collider.enabled = false;
         }
-    
-        Invoke("DisableSkeleton", 10f); 
+
+        Invoke("DisableSkeleton", 6f);
     }
-    
+
     void DisableSkeleton()
     {
-        gameObject.SetActive(false); 
+        gameObject.SetActive(false);
     }
-    
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (isDead || !other.CompareTag("princess")) return;
@@ -93,7 +103,7 @@ public class Skeleton : MonoBehaviour
     public void Damage()
     {
         if (isDead) return;
-        Debug.Log("Attack!");
+
         if (target.CompareTag("princess"))
         {
             Princess princess = target.GetComponent<Princess>();

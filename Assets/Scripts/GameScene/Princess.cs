@@ -2,16 +2,18 @@ using UnityEngine;
 
 public class Princess : MonoBehaviour
 {
-    public int health = 200; // Points de vie de la princesse
+    public int health = 200; 
     private Animator _animator;
+    public PrincessHealthUI healthUI;
 
     void Awake()
     {
         _animator = GetComponent<Animator>();
     }
+
     void Start()
     {
-        
+        healthUI.SetHearts(health / 20); // ex: 100 HP = 5 cœurs
     }
 
     void Update()
@@ -21,24 +23,22 @@ public class Princess : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        health -= damage; // Réduire les points de vie par la valeur des dégâts reçus
+        health -= damage;
+        healthUI.SetHearts(health / 20);
 
         if (health <= 0)
-        {
-            Die(); 
-        }
+            Die();
     }
 
     void Die()
     {
-        Debug.Log("Princess has died."); 
+        Debug.Log("Princess has died.");
         _animator.SetTrigger("PrincessDead");
-        Invoke("DisablePrincess", 10f); // Planifier la désactivation du GameObject
-
-    }
-
+        Invoke("DisablePrincess", 10f);
+        GameManager.Instance.GameOver(); 
+    } 
     void DisablePrincess()
     {
-        gameObject.SetActive(false); // Désactiver le GameObject
+        gameObject.SetActive(false);
     }
 }
